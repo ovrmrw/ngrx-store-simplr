@@ -1,0 +1,5 @@
+{
+  "vsicons.presets.angular": true,
+  "typescript.tsdk": "./node_modules/typescript/lib",
+  "tslint.autoFixOnSave": true
+}

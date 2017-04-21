@@ -1,0 +1,7 @@
+{
+  "extends": "../tsconfig.app.json",
+  "compilerOptions": {
+    "strictNullChecks": true,
+    "skipLibCheck": true
+  }
+}

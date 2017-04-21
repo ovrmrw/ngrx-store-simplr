@@ -1,4 +1,6 @@
-export { createSimplrProviders } from './ngx'
+export { _createSimplr } from './ngx'
 export { Simplr } from './simplr'
 export { Resolver } from './resolver'
 export { Wrapper } from './wrapper'
+export { Options, SimplrOptions } from './common'
+export { SimplrModule } from './simplr.module'

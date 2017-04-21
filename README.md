@@ -1,7 +1,9 @@
 # ngrx-store-simplr
-A wrapper library for @ngrx/store
+A wrapper library for @ngrx/store.
 
 ---
+
+## Install
 
 ```
 $ npm install --save ngrx-store-simplr
