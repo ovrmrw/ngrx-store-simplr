@@ -1,0 +1,21 @@
+{
+  "collectCoverageFrom": [
+    "src/**/*.{js,ts}"
+  ],
+  "setupFiles": [],
+  "transform": {
+    "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+  },
+  "testPathDirs": [
+    "<rootDir>/src"
+  ],
+  "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(js|ts)$",
+  "testResultsProcessor": "<rootDir>/node_modules/ts-jest/coverageprocessor.js",
+  "moduleFileExtensions": [
+    "js",
+    "json",
+    "node",
+    "ts"
+  ],
+  "verbose": true
+}
