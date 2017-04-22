@@ -2,8 +2,8 @@ import { ActionReducer, Action } from '@ngrx/store'
 
 
 export class Wrapper<T> {
-  wrapReducerWithCaseUpdate<K extends keyof T>(key: K, innerReducer: ActionReducer<T[K]>): ActionReducer<T[K]> {
-    const { _UPDATE_, _FAILED_ } = this.createActionKeys(key)
+  wrapReducerForSimplr<K extends keyof T>(key: K, innerReducer: ActionReducer<T[K]>): ActionReducer<T[K]> {
+    const { _UPDATE_, _FAILED_ } = this.createActionKeysForSimplr(key)
 
     return function outerReducer(state: T[K], action: Action): T[K] {
       switch (action.type) {
@@ -22,7 +22,7 @@ export class Wrapper<T> {
     }
   }
 
-  createActionKeys(key: string) {
+  createActionKeysForSimplr<K extends keyof T>(key: K) {
     return {
       _UPDATE_: this.createUpdateKey(key),
       _FAILED_: this.createFailedKey(key),

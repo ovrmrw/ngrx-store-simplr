@@ -36,7 +36,7 @@ export class Simplr<T>  {
   dispatch<K extends keyof T>(key: K, resolver: AsyncResolver<T, K>, options: SimplrOptions = {}): Observable<Result<T, K>> {
     // const returner$ = new Subject<Action>()
     const returner$ = new ReplaySubject<Action>()
-    const { _UPDATE_, _FAILED_ } = this.wrapper.createActionKeys(key)
+    const { _UPDATE_, _FAILED_ } = this.wrapper.createActionKeysForSimplr(key)
 
     const action$: Observable<Action> =
       Observable.of(resolver)
