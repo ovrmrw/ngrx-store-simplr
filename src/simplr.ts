@@ -51,7 +51,13 @@ export class Simplr<T>  {
         .timeout(options.timeout || TIMEOUT)
         .take(1)
         // .delay(0) // workaround for fakeAsync testing
-        .map(([callback, state]) => callback(state[key], state))
+        .map(([callback, state]) => {
+          if (callback instanceof Function) {
+            return callback(state[key], state)
+          } else {
+            throw new Error(callback + ' is not a Funtion.')
+          }
+        })
         .map(state => {
           return {
             type: _UPDATE_,

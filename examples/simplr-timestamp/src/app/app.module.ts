@@ -6,11 +6,9 @@ import { HttpModule } from '@angular/http';
 import { AppComponent } from './app.component';
 import { BooksContainerComponent } from './containers/books';
 import { BooksService } from './services/books';
-import { MyStoreModule } from './store/store.module';
 
-// import { StoreModule, Store } from '@ngrx/store';
-// import { reducer, initialState } from './store';
-import { SimplrModule, Simplr, Adapter, AdapterForNgrxStore } from '../../../../dist';
+import { MyStoreModule } from './store/store.module';
+import { Simplr, Adapter, AdapterForNgrxStore } from '../../../../dist';
 
 
 @NgModule({
@@ -23,8 +21,6 @@ import { SimplrModule, Simplr, Adapter, AdapterForNgrxStore } from '../../../../
     FormsModule,
     HttpModule,
     MyStoreModule,
-    // SimplrModule.forRoot(),
-    // SimplrModule,
   ],
   providers: [
     BooksService,
