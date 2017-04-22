@@ -20,7 +20,7 @@ export class AdapterForNgrxStore<T> extends Adapter<T> {
     }
   }
 
-  setState(action): void {
+  setState(action: Action): void {
     this.store.dispatch(action)
   }
 

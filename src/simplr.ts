@@ -34,7 +34,6 @@ export class Simplr<T>  {
   ) { }
 
   dispatch<K extends keyof T>(key: K, resolver: AsyncResolver<T, K>, options: SimplrOptions = {}): Observable<Result<T, K>> {
-    // const returner$ = new Subject<Action>()
     const returner$ = new ReplaySubject<Action>()
     const { _UPDATE_, _FAILED_ } = this.wrapper.getActionKeysForSimplr(key)
 
@@ -50,7 +49,6 @@ export class Simplr<T>  {
         .combineLatest(this.adapter.getState())
         .timeout(options.timeout || TIMEOUT)
         .take(1)
-        // .delay(0) // workaround for fakeAsync testing
         .map(([callback, state]) => {
           if (callback instanceof Function) {
             return callback(state[key], state)
@@ -73,11 +71,6 @@ export class Simplr<T>  {
         })
 
     action$.subscribe(action => {
-      // if (this.adapter.testing) {
-      //   console.log('TEST: ' + action.type + ' is dispatched.')
-      // } else {
-      //   this.adapter.setState(action)
-      // }
       if (this.adapter.testing) {
         this.adapter.setState(action, key)
       } else {
