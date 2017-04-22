@@ -1,6 +1,6 @@
 // export { createSimplr } from './ngx'
 export { Simplr } from './simplr'
-export { SyncVoR as Resolver } from './resolver'
+export { SyncValueOrResolver as Resolver } from './resolver'
 export { Wrapper } from './wrapper'
 export { SimplrOptions } from './common'
 export { Adapter, AdapterForNgrxStore, AdapterForTesting } from './adapters'

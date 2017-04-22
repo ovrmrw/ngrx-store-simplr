@@ -16,7 +16,7 @@ import 'rxjs/add/operator/do'
 import 'rxjs/add/operator/delay'
 
 import { Wrapper } from './wrapper'
-import { ValueOrResolver, SyncVoR } from './resolver'
+import { ValueOrResolver, SyncValueOrResolver } from './resolver'
 import { SimplrOptions, Result } from './common'
 import { Adapter } from './adapters'
 
@@ -41,7 +41,7 @@ export class Simplr<T>  {
       Observable.of(resolver)
         .concatMap(resolver => {
           if (resolver instanceof Promise || resolver instanceof Observable) {
-            return Observable.from<SyncVoR<T, K>>(resolver).retry(options.retry || RETRY)
+            return Observable.from<SyncValueOrResolver<T, K>>(resolver).retry(options.retry || RETRY)
           } else {
             return Observable.of(resolver)
           }

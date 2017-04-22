@@ -14,10 +14,10 @@ export type ValueOrResolver<T, K extends keyof T> =
   Value<T, K> | Resolver<T, K> |
   AsyncValue<T, K> | AsyncResolver<T, K>
 
-export type SyncVoR<T, K extends keyof T> =
+export type SyncValueOrResolver<T, K extends keyof T> =
   Value<T, K> | Resolver<T, K>
 
-export type AsyncVoR<T, K extends keyof T> =
+export type AsyncValueOrResolver<T, K extends keyof T> =
   AsyncValue<T, K> | AsyncResolver<T, K>
 
 // VoR ... Value or Resolver
