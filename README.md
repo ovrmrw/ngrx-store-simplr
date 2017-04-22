@@ -15,4 +15,5 @@ You also need to install @angular and @ngrx.
 
 Examples
 
+- [simplr-counter](https://github.com/ovrmrw/simplr-counter)
 - [simplr-timestamp](https://github.com/ovrmrw/simplr-timestamp)
