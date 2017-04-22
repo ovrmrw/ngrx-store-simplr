@@ -8,11 +8,9 @@ import { BooksContainerComponent } from './containers/books';
 import { BooksService } from './services/books';
 import { MyStoreModule } from './store/store.module';
 
-import { StoreModule, Store } from '@ngrx/store';
-import { Simplr, SIMPLR_OPTIONS, SimplrOptions, /*provideSimplrProviders*/ _createSimplr } from '../../../../dist';
-import { reducer, initialState } from './store';
-
-// const o = { logging: true }
+// import { StoreModule, Store } from '@ngrx/store';
+// import { reducer, initialState } from './store';
+import { SimplrModule, Simplr, Adapter, AdapterForNgrxStore } from '../../../../dist';
 
 
 @NgModule({
@@ -24,16 +22,14 @@ import { reducer, initialState } from './store';
     BrowserModule,
     FormsModule,
     HttpModule,
-    MyStoreModule.forRoot({ logging: true, timeout: 1000, retry: 3 }),
-    // StoreModule.provideStore(reducer, initialState),
-    // SimplrModule.forRoot({ logging: true }),
+    MyStoreModule,
+    // SimplrModule.forRoot(),
+    // SimplrModule,
   ],
   providers: [
     BooksService,
-    // { provide: SIMPLR_OPTIONS, useValue: options },
-    // Simplr,
-    // { provide: Simplr, useFactory: _createSimplr, deps: [Store, Injector] }
-    // { provide: Simplr, useClass: Simplr2 }
+    Simplr,
+    { provide: Adapter, useClass: AdapterForNgrxStore },
   ],
   bootstrap: [AppComponent]
 })

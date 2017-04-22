@@ -1,27 +1,14 @@
 import { NgModule, Injector, ModuleWithProviders } from '@angular/core';
 import { StoreModule, Store } from '@ngrx/store';
-import { initialState, reducer } from './reducer';
-// import { options } from './index';
-import { SIMPLR_OPTIONS, Simplr, _createSimplr, SimplrOptions } from '../../../../../dist';
+import { SimplrModule, Simplr, Adapter, AdapterForNgrxStore } from '../../../../../dist';
 
-// export const options: SimplrOptions = { logging: true };
+import { initialState, reducer } from './reducer';
 
 
 @NgModule({
   imports: [
-    StoreModule.provideStore(reducer, initialState)
+    StoreModule.provideStore(reducer, initialState),
+    // SimplrModule,
   ]
 })
-export class MyStoreModule {
-  static forRoot(options: SimplrOptions = { logging: true, timeout: 1000, retry: 3 }): ModuleWithProviders {
-    return {
-      ngModule: MyStoreModule,
-      providers: [
-        // { provide: SIMPLR_OPTIONS, useValue: options },
-        Simplr,
-        // { provide: Simplr, useFactory: _createSimplr, deps: [Store, Injector] }
-
-      ]
-    };
-  }
-}
+export class MyStoreModule { }
