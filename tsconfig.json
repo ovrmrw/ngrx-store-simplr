@@ -4,7 +4,7 @@
     "module": "commonjs",
     "moduleResolution": "node",
     "noImplicitAny": false,
-    "sourceMap": false,
+    "sourceMap": true,
     "outDir": ".tscOutDir",
     "declaration": true,
     "emitDecoratorMetadata": true,

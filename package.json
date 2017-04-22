@@ -1,6 +1,6 @@
 {
   "name": "ngrx-store-simplr",
-  "version": "0.1.2",
+  "version": "0.1.4",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -25,6 +25,7 @@
     "index.d.ts",
     "dist",
     "dist-esnext",
+    "src",
     "package.json"
   ],
   "author": "Tomohiro Noguchi @ovrmrw",

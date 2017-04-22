@@ -1,5 +1,5 @@
 import { Action } from '@ngrx/store';
-import { Wrapper, Resolver } from '../../../../../../dist';
+import { Wrapper, Resolver } from '../../../../../../src';
 
 import { AppState } from '../models/state';
 

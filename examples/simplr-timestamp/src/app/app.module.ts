@@ -8,7 +8,7 @@ import { BooksContainerComponent } from './containers/books';
 import { BooksService } from './services/books';
 
 import { MyStoreModule } from './store/store.module';
-import { Simplr, Adapter, AdapterForNgrxStore } from '../../../../dist';
+import { Simplr, Adapter, AdapterForNgrxStore } from '../../../../src';
 
 
 @NgModule({

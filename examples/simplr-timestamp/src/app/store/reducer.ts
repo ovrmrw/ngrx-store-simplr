@@ -1,5 +1,5 @@
 import { combineReducers } from '@ngrx/store';
-import { Wrapper } from '../../../../../dist';
+import { Wrapper } from '../../../../../src';
 
 import { AppState } from './models/state';
 import { booksReducer } from './reducers/books';

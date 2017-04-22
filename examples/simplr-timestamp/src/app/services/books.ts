@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Dispatcher, Action } from '@ngrx/store';
-import { Simplr } from '../../../../../dist';
+import { Simplr } from '../../../../../src';
 
 import { AppState, Book } from '../store';
 import * as books from '../store/actions/books';
