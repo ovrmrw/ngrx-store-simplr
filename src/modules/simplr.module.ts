@@ -1,12 +1,17 @@
-import { NgModule } from '@angular/core'
+import { NgModule, ModuleWithProviders } from '@angular/core'
 import { Simplr } from '../simplr'
 import { Adapter, AdapterForNgrxStore } from '../adapters'
 
 
-@NgModule({
-  providers: [
-    { provide: Adapter, useClass: AdapterForNgrxStore },
-    Simplr,
-  ]
-})
-export class SimplrModule { }
+@NgModule({})
+export class SimplrModule {
+  static forRoot(): ModuleWithProviders {
+    return {
+      ngModule: SimplrModule,
+      providers: [
+        { provide: Adapter, useClass: AdapterForNgrxStore },
+        Simplr,
+      ]
+    }
+  }
+}
