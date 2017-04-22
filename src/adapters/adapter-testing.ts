@@ -1,22 +1,32 @@
 // import { Injectable, Inject, Optional } from '@angular/core'
 import { Observable } from 'rxjs/Observable'
+import { Action } from '../common'
 import { Adapter } from './adapter'
 
 
 export class AdapterForTesting<T> extends Adapter<T> {
   testing = true
 
-  private fakeState: Partial<T>
+  private fakeState: Partial<T> = {}
 
-  setState(action): void {
-    console.warn('Use setState function for NOT testing case.')
+  setState<K extends keyof T>(action: Action, key: K): void {
+    if (action.payload) {
+      const state = this.fakeState[key]
+      if (state) {
+        const newState = {
+          ...state as any,
+          ...action.payload,
+        }
+        this.fakeState[key] = newState
+      }
+    }
   }
 
   getState(): Observable<T> {
-    return Observable.of(this.fakeState || {})
+    return Observable.of(this.fakeState)
   }
 
-  setTestingState(state: Partial<T>): void {
+  setInitialState(state: Partial<T>): void {
     this.fakeState = state
   }
 }

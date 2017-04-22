@@ -2,7 +2,9 @@
   "collectCoverageFrom": [
     "src/**/*.{js,ts}"
   ],
-  "setupFiles": [],
+  "setupFiles": [
+    "<rootDir>/node_modules/core-js"
+  ],
   "transform": {
     "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
   },

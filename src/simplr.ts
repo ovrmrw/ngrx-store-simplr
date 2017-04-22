@@ -1,7 +1,6 @@
-import { Inject, SkipSelf, Optional, Injectable, Injector, forwardRef } from '@angular/core'
-import { Store, Action, Dispatcher, State } from '@ngrx/store'
+import { Inject, Optional, Injectable } from '@angular/core'
+import { Store, Action } from '@ngrx/store'
 import { Observable } from 'rxjs/Observable'
-import { Subject } from 'rxjs/Subject'
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/from'
@@ -30,13 +29,14 @@ export class Simplr<T>  {
   private wrapper = new Wrapper<T>()
 
   constructor(
-    @Inject(Adapter) private adapter: Adapter<T>,
+    @Inject(Adapter)
+    private adapter: Adapter<T>,
   ) { }
 
   dispatch<K extends keyof T>(key: K, resolver: AsyncResolver<T, K>, options: SimplrOptions = {}): Observable<Result<T, K>> {
     // const returner$ = new Subject<Action>()
     const returner$ = new ReplaySubject<Action>()
-    const { _UPDATE_, _FAILED_ } = this.wrapper.createActionKeysForSimplr(key)
+    const { _UPDATE_, _FAILED_ } = this.wrapper.getActionKeysForSimplr(key)
 
     const action$: Observable<Action> =
       Observable.of(resolver)
@@ -73,8 +73,13 @@ export class Simplr<T>  {
         })
 
     action$.subscribe(action => {
+      // if (this.adapter.testing) {
+      //   console.log('TEST: ' + action.type + ' is dispatched.')
+      // } else {
+      //   this.adapter.setState(action)
+      // }
       if (this.adapter.testing) {
-        console.log('TEST: ' + action.type + ' is dispatched.')
+        this.adapter.setState(action, key)
       } else {
         this.adapter.setState(action)
       }

@@ -28,7 +28,7 @@ export class AdapterForNgrxStore<T> extends Adapter<T> {
     return this.store.select(s => s)
   }
 
-  setTestingState(state): void {
-    console.warn('Use setTestState function only for testing.')
+  setInitialState(state): void {
+    console.warn('Use setInitialState function only for testing.')
   }
 }

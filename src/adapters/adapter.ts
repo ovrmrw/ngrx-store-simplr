@@ -4,7 +4,7 @@ import { Action } from '../common'
 
 export abstract class Adapter<T> {
   readonly abstract testing: boolean
-  abstract setState(action: Action): void;
+  abstract setState<K extends keyof T>(action: Action, key?: K): void;
   abstract getState(): Observable<T>;
-  abstract setTestingState(state: Partial<T>): void;
+  abstract setInitialState(state: Partial<T>): void;
 }

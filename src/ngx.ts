@@ -1,16 +1,12 @@
-import { Injectable, Provider, OpaqueToken, InjectionToken, NgModule, ModuleWithProviders } from '@angular/core'
-import { Store } from '@ngrx/store'
-
+// import { Injectable, Provider, OpaqueToken, InjectionToken, NgModule, ModuleWithProviders } from '@angular/core'
+// import { Store } from '@ngrx/store'
 import { Simplr } from './simplr'
-import { Wrapper } from './wrapper'
-import { SimplrOptions } from './common'
 import { Adapter, AdapterForNgrxStore, AdapterForTesting } from './adapters'
 
 
-
-export function createSimplr(store): any {
-  return new Simplr(store)
-};
+// export function createSimplr(store): any {
+//   return new Simplr(store)
+// };
 
 
 export function provideSimplr() {
