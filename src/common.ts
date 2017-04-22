@@ -1,11 +1,19 @@
-import { OpaqueToken } from '@angular/core'
+import { InjectionToken } from '@angular/core'
+import { Action } from '@ngrx/store'
 
-
-export interface Options {
-  logging?: boolean;
-  timeout?: number;
-  retry?: number;
+export interface SimplrOptions {
+  logging?: boolean
+  timeout?: number
+  retry?: number
 }
 
+export const SIMPLR_OPTIONS = new InjectionToken<SimplrOptions>('Token Simplr Options')
 
-export const SimplrOptions = new OpaqueToken('Token Simplr Options');
+
+
+
+export interface Result<T, K extends keyof T> {
+  action: Action
+  state: T
+  partial: T[K]
+}

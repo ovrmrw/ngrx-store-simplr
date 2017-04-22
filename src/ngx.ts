@@ -3,20 +3,20 @@ import { Store } from '@ngrx/store'
 
 import { Simplr } from './simplr'
 import { Wrapper } from './wrapper'
-import { Options } from './common'
+import { SimplrOptions, SIMPLR_OPTIONS } from './common'
 
 
 
-export function _createSimplr(store, wrapper, options) {
-  return new Simplr<any>(store, wrapper, options)
+export function _createSimplr(store, options): any {
+  return new Simplr(store, options)
 };
 
 
-// export function createSimplrProviders(options: Options = {}) {
+// export function provideSimplrProviders(options: SimplrOptions = {}) {
 //   return [
 //     Wrapper,
-//     { provide: SimplrOptions, useValue: options },
-//     { provide: Simplr, useFactory: _createSimplr, deps: [Store, Wrapper, SimplrOptions] },
+//     { provide: SIMPLR_OPTIONS, useValue: options },
+//     { provide: Simplr, useFactory: _createSimplr, deps: [Store, SIMPLR_OPTIONS] },
 //     // { provide: Simplr, useClass: SimplrInjectable },
 //   ]
 // }

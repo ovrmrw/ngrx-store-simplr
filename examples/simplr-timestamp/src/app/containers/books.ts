@@ -25,7 +25,7 @@ export class BooksContainerComponent implements OnInit {
 
   ngOnInit() {
     this.state$.subscribe(state => {
-      // console.log('newState:', state);
+      console.log('newState:', state);
     });
   }
 
