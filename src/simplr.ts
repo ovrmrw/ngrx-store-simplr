@@ -16,7 +16,7 @@ import 'rxjs/add/operator/do'
 import 'rxjs/add/operator/delay'
 
 import { Wrapper } from './wrapper'
-import { AsyncResolver } from './resolver'
+import { ValueOrResolver, SyncVoR } from './resolver'
 import { SimplrOptions, Result } from './common'
 import { Adapter } from './adapters'
 
@@ -33,27 +33,27 @@ export class Simplr<T>  {
     private adapter: Adapter<T>,
   ) { }
 
-  dispatch<K extends keyof T>(key: K, resolver: AsyncResolver<T, K>, options: SimplrOptions = {}): Observable<Result<T, K>> {
+  dispatch<K extends keyof T>(key: K, resolver: ValueOrResolver<T, K>, options: SimplrOptions = {}): Observable<Result<T, K>> {
     const returner$ = new ReplaySubject<Action>()
     const { _UPDATE_, _FAILED_ } = this.wrapper.getActionKeysForSimplr(key)
 
     const action$: Observable<Action> =
       Observable.of(resolver)
-        .concatMap(projection => {
-          if (projection instanceof Promise || projection instanceof Observable) {
-            return Observable.from(projection).retry(options.retry || RETRY)
+        .concatMap(resolver => {
+          if (resolver instanceof Promise || resolver instanceof Observable) {
+            return Observable.from<SyncVoR<T, K>>(resolver).retry(options.retry || RETRY)
           } else {
-            return Observable.of(projection)
+            return Observable.of(resolver)
           }
         })
         .combineLatest(this.adapter.getState())
         .timeout(options.timeout || TIMEOUT)
         .take(1)
-        .map(([callback, state]) => {
-          if (callback instanceof Function) {
-            return callback(state[key], state)
+        .map(([resolver, state]) => {
+          if (resolver instanceof Function) {
+            return resolver(state[key], state)
           } else {
-            throw new Error(callback + ' is not a Funtion.')
+            return resolver
           }
         })
         .map(state => {
