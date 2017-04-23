@@ -2,23 +2,21 @@
 import { Observable } from 'rxjs/Observable'
 import { Action } from '../common'
 import { Adapter } from './adapter'
+import { Wrapper } from '../wrapper'
 
 
 export class AdapterForTesting<T> extends Adapter<T> {
   testing = true
-
   private fakeState: Partial<T> = {}
+  private wrapper: Wrapper<T> = new Wrapper<T>()
 
   setState<K extends keyof T>(action: Action, key: K): void {
-    if (action.payload) {
-      const state = this.fakeState[key]
-      if (state) {
-        const newState = {
-          ...state as any,
-          ...action.payload,
-        }
-        this.fakeState[key] = newState
-      }
+    const state = this.fakeState[key]
+    if (state !== undefined) {
+      const reducer = this.wrapper.createWrappedReducer(key)
+      this.fakeState[key] = reducer(state, action)
+    } else {
+      console.error(key + ' is not found in fakeState keys.')
     }
   }
 

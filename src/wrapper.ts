@@ -8,9 +8,15 @@ export class Wrapper<T> {
     return function outerReducer(state: T[K], action: Action): T[K] {
       switch (action.type) {
         case _UPDATE_:
-          return {
-            ...state as any,
-            ...action.payload,
+          if (action.payload instanceof Object && !(action.payload instanceof Array)) {
+            return {
+              ...state as any,
+              ...action.payload,
+            }
+          } else if (action.payload instanceof Array) {
+            return [...action.payload] as any
+          } else {
+            return action.payload
           }
 
         case _FAILED_:

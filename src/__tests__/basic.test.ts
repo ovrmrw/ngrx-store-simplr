@@ -7,17 +7,21 @@ interface TestState {
   timestamp: {
     local: number,
     server: number,
-  }
+  },
+  counter: number,
+  flag: boolean,
+  array: string[],
 }
 
 const initialState: TestState = {
   timestamp: {
     local: 0,
     server: 0,
-  }
+  },
+  counter: 1,
+  flag: true,
+  array: ['a', 'b'],
 }
-
-const { _UPDATE_, _FAILED_ } = new Wrapper<TestState>().getActionKeysForSimplr('timestamp')
 
 
 describe('Basic Test', () => {
@@ -63,18 +67,31 @@ describe('Basic Test', () => {
       expect(state.timestamp).toEqual({ local: 2, server: 0 })
     })
 
-    it('can dispatch only Object structure', async () => {
+    it('can dispatch number', async () => {
+      const { _UPDATE_, _FAILED_ } = new Wrapper<TestState>().getActionKeysForSimplr('counter')
       adapter.setInitialState({ ...initialState })
-      const result1 = await simplr.dispatch('timestamp', 1).toPromise()
-      const result2 = await simplr.dispatch('timestamp', 'foo').toPromise()
-      const result3 = await simplr.dispatch('timestamp', true).toPromise()
-      const result4 = await simplr.dispatch('timestamp', []).toPromise()
-      const result5 = await simplr.dispatch('timestamp', ({})).toPromise()
-      expect(result1.action).toEqual({ type: _FAILED_ })
-      expect(result2.action).toEqual({ type: _FAILED_ })
-      expect(result3.action).toEqual({ type: _FAILED_ })
-      expect(result4.action).toEqual({ type: _FAILED_ })
-      expect(result5.action).toEqual({ type: _UPDATE_, payload: {} })
+      const result = await simplr.dispatch('counter', (state) => state - 1).toPromise()
+      expect(result.action).toEqual({ type: _UPDATE_, payload: 0 })
+      const state = await adapter.getState().toPromise()
+      expect(state.counter).toBe(0)
+    })
+
+    it('can dispatch boolean', async () => {
+      const { _UPDATE_, _FAILED_ } = new Wrapper<TestState>().getActionKeysForSimplr('flag')
+      adapter.setInitialState({ ...initialState })
+      const result = await simplr.dispatch('flag', false).toPromise()
+      expect(result.action).toEqual({ type: _UPDATE_, payload: false })
+      const state = await adapter.getState().toPromise()
+      expect(state.flag).toBe(false)
+    })
+
+    it('can dispatch array', async () => {
+      const { _UPDATE_, _FAILED_ } = new Wrapper<TestState>().getActionKeysForSimplr('array')
+      adapter.setInitialState({ ...initialState })
+      const result = await simplr.dispatch('array', (state) => [...state, 'c']).toPromise()
+      expect(result.action).toEqual({ type: _UPDATE_, payload: ['a', 'b', 'c'] })
+      const state = await adapter.getState().toPromise()
+      expect(state.array).toEqual(['a', 'b', 'c'])
     })
   })
 

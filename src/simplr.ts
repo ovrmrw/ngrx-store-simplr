@@ -62,17 +62,17 @@ export class Simplr<T>  {
           }
           return temp
         })
-        .map(payload => { // resolved-payload must be Object structure
-          if (payload instanceof Object && !(payload instanceof Array)) {
-            return payload as Partial<T[K]>
-          } else {
-            if (!this.adapter.testing) {
-              console.error('error resolver:', resolver)
-              console.error('error resolved-payload:', payload)
-            }
-            throw new Error('resolved-payload must be Object structure.')
-          }
-        })
+        // .map(payload => { // resolved-payload must be Object structure
+        //   if (payload instanceof Object && !(payload instanceof Array)) {
+        //     return payload as Partial<T[K]>
+        //   } else {
+        //     if (!this.adapter.testing) {
+        //       console.error('error resolver:', resolver)
+        //       console.error('error resolved-payload:', payload)
+        //     }
+        //     throw new Error('resolved-payload must be Object structure.')
+        //   }
+        // })
         .map(payload => {
           return {
             type: _UPDATE_,
