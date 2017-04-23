@@ -39,7 +39,7 @@ export class Simplr<T>  {
 
     const action$: Observable<Action> =
       Observable.of(resolver)
-        .concatMap(resolver => {
+        .concatMap(resolver => { // if resolver is Promise or Observable, resolve it here
           if (resolver instanceof Promise || resolver instanceof Observable) {
             return Observable.from<SyncValueOrResolver<T, K>>(resolver).retry(options.retry || RETRY)
           } else {
@@ -49,21 +49,41 @@ export class Simplr<T>  {
         .combineLatest(this.adapter.getState())
         .timeout(options.timeout || TIMEOUT)
         .take(1)
-        .map(([resolver, state]) => {
+        .map(([resolver, state]) => { // if resolver is Funtion, call it with states
           if (resolver instanceof Function) {
             return resolver(state[key], state)
           } else {
             return resolver
           }
         })
-        .map(state => {
+        .map(function (resolver) { // resolve deep nested callbacks
+          let temp: typeof resolver | Function = resolver
+          while (temp instanceof Function) {
+            temp = temp.apply(null, arguments)
+          }
+          return temp
+        })
+        .map(payload => { // resolved-payload must be Object structure
+          if (payload instanceof Object && !(payload instanceof Array)) {
+            return payload as Partial<T[K]>
+          } else {
+            if (!this.adapter.testing) {
+              console.error('error resolver:', resolver)
+              console.error('error resolved-payload:', payload)
+            }
+            throw new Error('resolved-payload must be Object structure.')
+          }
+        })
+        .map(payload => {
           return {
             type: _UPDATE_,
-            payload: state,
+            payload,
           } as Action
         })
         .catch(err => {
-          console.error(err.message || err)
+          if (!this.adapter.testing) {
+            console.error(err.message || err)
+          }
           return Observable.of({
             type: _FAILED_,
             // payload: err,

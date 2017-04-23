@@ -1,4 +1,4 @@
-import { Simplr } from '../'
+import { Simplr, Wrapper } from '../'
 import { Adapter, AdapterForTesting } from '../'
 import { Observable } from 'rxjs/Observable'
 
@@ -16,6 +16,8 @@ const initialState: TestState = {
     server: 0,
   }
 }
+
+const { _UPDATE_, _FAILED_ } = new Wrapper<TestState>().getActionKeysForSimplr('timestamp')
 
 
 describe('Basic Test', () => {
@@ -50,6 +52,29 @@ describe('Basic Test', () => {
       const state = await adapter.getState().toPromise()
       expect(state.timestamp.local).toBe(1)
       expect(state.timestamp).toEqual({ local: 1, server: 0 })
+    })
+
+    it('can dispatch deep nested callback', async () => {
+      adapter.setInitialState({ ...initialState })
+      await simplr.dispatch('timestamp', ({ local: 1 })).toPromise()
+      await simplr.dispatch('timestamp', (state) => () => () => () => ({ local: state.local + 1 })).toPromise()
+      const state = await adapter.getState().toPromise()
+      expect(state.timestamp.local).toBe(2)
+      expect(state.timestamp).toEqual({ local: 2, server: 0 })
+    })
+
+    it('can dispatch deep nested callback', async () => {
+      adapter.setInitialState({ ...initialState })
+      const result1 = await simplr.dispatch('timestamp', (1)).toPromise()
+      const result2 = await simplr.dispatch('timestamp', ('foo')).toPromise()
+      const result3 = await simplr.dispatch('timestamp', (true)).toPromise()
+      const result4 = await simplr.dispatch('timestamp', ([])).toPromise()
+      const result5 = await simplr.dispatch('timestamp', ({})).toPromise()
+      expect(result1.action).toEqual({ type: _FAILED_ })
+      expect(result2.action).toEqual({ type: _FAILED_ })
+      expect(result3.action).toEqual({ type: _FAILED_ })
+      expect(result4.action).toEqual({ type: _FAILED_ })
+      expect(result5.action).toEqual({ type: _UPDATE_, payload: {} })
     })
   })
 
