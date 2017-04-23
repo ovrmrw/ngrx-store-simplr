@@ -178,15 +178,15 @@ Did you notice that you write no actions and no reducers?
 `dispatch` function allows below sync and async writings.
 
 ```ts
-this.simplr.dispatch('counter', (state) => ({ counter: state.value + 1 }))
+this.simplr.dispatch('counter', (state) => ({ value: state.value + 1 }))
 // or
-this.simplr.dispatch('counter', ({ counter: 1 }))
+this.simplr.dispatch('counter', ({ value: 1 }))
 // or 
-this.simplr.dispatch('counter', Promise.resolve((state) => ({ counter: state.value + 1 })))
+this.simplr.dispatch('counter', Promise.resolve((state) => ({ value: state.value + 1 })))
 // or
-this.simplr.dispatch('counter', Promise.resolve({ counter: 1 }))
+this.simplr.dispatch('counter', Promise.resolve({ value: 1 }))
 // or
-this.simplr.dispatch('counter', Observable.of((state) => ({ counter: state.value + 1 })))
+this.simplr.dispatch('counter', Observable.of((state) => ({ value: state.value + 1 })))
 // or
-this.simplr.dispatch('counter', Observable.of({ counter: 1 }))
+this.simplr.dispatch('counter', Observable.of({ value: 1 }))
 ```
