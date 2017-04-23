@@ -1,7 +1,18 @@
 # ngrx-store-simplr
-A wrapper library for @ngrx/store.
+A wrapper library for @ngrx/store to use Redux concept in an easy way.
 
 ---
+
+Maybe your desires:
+
+- like to use Redux.
+- but writing many actions and reducers is painful.
+- very painful.
+- to handle async actions is so painful.
+- finding an easy way to use Redux concept.
+- want to use Angular and RxJS.
+
+Here Simplr comes into play.
 
 ## Install
 
