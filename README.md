@@ -148,7 +148,8 @@ export class CounterContainerComponent {
 }
 ```
 
-Done!
+Done!  
+Did you notice that you write no actions and no reducers?
 
 ---
 
