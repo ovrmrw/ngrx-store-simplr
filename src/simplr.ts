@@ -56,10 +56,10 @@ export class Simplr<T>  {
             return resolver
           }
         })
-        .map(function (resolver) { // resolve deep nested callbacks
+        .map((resolver) => { // resolve deep nested callbacks
           let temp: typeof resolver | Function = resolver
           while (temp instanceof Function) {
-            temp = temp.apply(null, arguments)
+            temp = temp()
           }
           return temp
         })

@@ -63,12 +63,12 @@ describe('Basic Test', () => {
       expect(state.timestamp).toEqual({ local: 2, server: 0 })
     })
 
-    it('can dispatch deep nested callback', async () => {
+    it('can dispatch only Object structure', async () => {
       adapter.setInitialState({ ...initialState })
-      const result1 = await simplr.dispatch('timestamp', (1)).toPromise()
-      const result2 = await simplr.dispatch('timestamp', ('foo')).toPromise()
-      const result3 = await simplr.dispatch('timestamp', (true)).toPromise()
-      const result4 = await simplr.dispatch('timestamp', ([])).toPromise()
+      const result1 = await simplr.dispatch('timestamp', 1).toPromise()
+      const result2 = await simplr.dispatch('timestamp', 'foo').toPromise()
+      const result3 = await simplr.dispatch('timestamp', true).toPromise()
+      const result4 = await simplr.dispatch('timestamp', []).toPromise()
       const result5 = await simplr.dispatch('timestamp', ({})).toPromise()
       expect(result1.action).toEqual({ type: _FAILED_ })
       expect(result2.action).toEqual({ type: _FAILED_ })
