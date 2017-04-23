@@ -9,6 +9,9 @@ import { Adapter, AdapterForNgrxStore, AdapterForTesting } from './adapters'
 // };
 
 
+/**
+ * DEPRECATED
+ */
 export function provideSimplr() {
   return [
     { provide: Adapter, useClass: AdapterForNgrxStore },
@@ -17,6 +20,9 @@ export function provideSimplr() {
 }
 
 
+/**
+ * DEPRECATED
+ */
 export function provideSimplrForTesting() {
   return [
     { provide: Adapter, useClass: AdapterForTesting },

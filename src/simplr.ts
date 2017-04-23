@@ -1,10 +1,9 @@
 import { Inject, Optional, Injectable } from '@angular/core'
-import { Store, Action } from '@ngrx/store'
 import { Observable } from 'rxjs/Observable'
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/from'
-import 'rxjs/add/operator/concatMap'
+import 'rxjs/add/operator/mergeMap'
 import 'rxjs/add/operator/combineLatest'
 import 'rxjs/add/operator/timeout'
 import 'rxjs/add/operator/take'
@@ -17,7 +16,7 @@ import 'rxjs/add/operator/delay'
 
 import { Wrapper } from './wrapper'
 import { ValueOrResolver, SyncValueOrResolver } from './resolver'
-import { SimplrOptions, Result } from './common'
+import { SimplrOptions, Result, Action } from './common'
 import { Adapter } from './adapters'
 
 const TIMEOUT = 1000 * 15
@@ -39,7 +38,7 @@ export class Simplr<T>  {
 
     const action$: Observable<Action> =
       Observable.of(resolver)
-        .concatMap(resolver => { // if resolver is Promise or Observable, resolve it here
+        .mergeMap(resolver => { // if resolver is Promise or Observable, resolve it here
           if (resolver instanceof Promise || resolver instanceof Observable) {
             return Observable.from<SyncValueOrResolver<T, K>>(resolver).retry(options.retry || RETRY)
           } else {
@@ -56,7 +55,7 @@ export class Simplr<T>  {
             return resolver
           }
         })
-        .map((resolver) => { // resolve deep nested callbacks
+        .map(resolver => { // resolve deep nested callbacks
           let temp: typeof resolver | Function = resolver
           while (temp instanceof Function) {
             temp = temp()

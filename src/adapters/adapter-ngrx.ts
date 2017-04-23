@@ -16,7 +16,7 @@ export class AdapterForNgrxStore<T> extends Adapter<T> {
   ) {
     super()
     if (!this.store) {
-      throw new Error('Token "Store" is not found.')
+      throw new Error('Token "Store" for @ngrx/store is not found.')
     }
   }
 
