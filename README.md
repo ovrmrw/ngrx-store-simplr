@@ -166,5 +166,27 @@ Did you notice that you write no actions and no reducers?
 
 ## Demos
 
-- [simplr-counter](https://ovrmrw.github.io/simplr-counter/)
-- [simplr-timestamp](https://ovrmrw.github.io/simplr-timestamp/)
+- [simplr-counter on GitHub Pages](https://ovrmrw.github.io/simplr-counter/)
+- [simplr-timestamp on GitHub Pages](https://ovrmrw.github.io/simplr-timestamp/)
+
+---
+
+## Details
+
+### dispatch
+
+`dispatch` function allows below sync and async writings.
+
+```ts
+this.simplr.dispatch('counter', (state) => ({ counter: state.value + 1 }))
+// or
+this.simplr.dispatch('counter', ({ counter: 1 }))
+// or 
+this.simplr.dispatch('counter', Promise.resolve((state) => ({ counter: state.value + 1 })))
+// or
+this.simplr.dispatch('counter', Promise.resolve({ counter: 1 }))
+// or
+this.simplr.dispatch('counter', Observable.of((state) => ({ counter: state.value + 1 })))
+// or
+this.simplr.dispatch('counter', Observable.of({ counter: 1 }))
+```
