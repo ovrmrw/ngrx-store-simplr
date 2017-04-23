@@ -2,7 +2,7 @@ import { ActionReducer, Action } from '@ngrx/store'
 
 
 export class Wrapper<T> {
-  wrapReducerForSimplr<K extends keyof T>(key: K, innerReducer: ActionReducer<T[K]>): ActionReducer<T[K]> {
+  createWrappedReducer<K extends keyof T>(key: K, innerReducer?: ActionReducer<T[K]>): ActionReducer<T[K]> {
     const { _UPDATE_, _FAILED_ } = this.getActionKeysForSimplr(key)
 
     return function outerReducer(state: T[K], action: Action): T[K] {
@@ -17,7 +17,7 @@ export class Wrapper<T> {
           return state
 
         default:
-          return innerReducer(state, action)
+          return innerReducer ? innerReducer(state, action) : state
       }
     }
   }
