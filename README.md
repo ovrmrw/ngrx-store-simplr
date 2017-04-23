@@ -1,4 +1,4 @@
-# ngrx-store-simplr
+# Simplr
 A wrapper library for @ngrx/store to use Redux concept in an easy way.
 
 ---
