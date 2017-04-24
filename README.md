@@ -169,9 +169,9 @@ Did you notice that you write no actions and no reducers?
 `dispatch` function allows below sync and async writings.
 
 ```ts
-this.simplr.dispatch('counter', (state) => state + 1 }))
+this.simplr.dispatch('counter', (state) => state + 1 })
 // or
-this.simplr.dispatch('counter', 1))
+this.simplr.dispatch('counter', 1)
 // or 
 this.simplr.dispatch('counter', Promise.resolve((state) => state + 1 ))
 // or
