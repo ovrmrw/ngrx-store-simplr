@@ -1,4 +1,3 @@
-// import { Injectable, Inject, Optional } from '@angular/core'
 import { Observable } from 'rxjs/Observable'
 import { Action } from '../common'
 import { Adapter } from './adapter'

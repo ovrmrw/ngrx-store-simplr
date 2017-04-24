@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@angular/core'
+// import { Inject, Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Observable'
 import { ReplaySubject } from 'rxjs/ReplaySubject'
 import 'rxjs/add/observable/of'
@@ -23,12 +23,10 @@ const TIMEOUT = 1000 * 15
 const RETRY = 3
 
 
-// @Injectable()
 export class Simplr<T>  {
   private wrapper = new Wrapper<T>()
 
   constructor(
-    // @Inject(Adapter)
     private adapter: Adapter<T>,
   ) { }
 

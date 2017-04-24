@@ -5,6 +5,6 @@
   },
   "angularCompilerOptions": {
     "strictMetadataEmit": true,
-    "genDir": "./.dest-ngsummary"
+    "genDir": ".dest-ngsummary"
   }
 }
