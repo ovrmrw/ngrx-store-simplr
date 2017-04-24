@@ -1,6 +1,6 @@
 // import { Inject, Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Observable'
-import { ReplaySubject } from 'rxjs/ReplaySubject'
+import { AsyncSubject } from 'rxjs/AsyncSubject'
 import 'rxjs/add/observable/of'
 import 'rxjs/add/observable/from'
 import 'rxjs/add/operator/mergeMap'
@@ -31,7 +31,7 @@ export class Simplr<T>  {
   ) { }
 
   dispatch<K extends keyof T>(key: K, resolver: PartialValueOrResolver<T, K>, options: SimplrOptions = {}): Observable<Result<T, K>> {
-    const returner$ = new ReplaySubject<Action>()
+    const returner$ = new AsyncSubject<Action>()
     const { _UPDATE_, _FAILED_ } = this.wrapper.getActionKeysForSimplr(key)
 
     const action$: Observable<Action> =
@@ -94,6 +94,7 @@ export class Simplr<T>  {
         this.adapter.setState(action)
       }
       returner$.next(action)
+      returner$.complete()
     })
 
     return returner$
