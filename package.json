@@ -1,12 +1,12 @@
 {
   "name": "ngrx-store-simplr",
-  "version": "0.1.22",
+  "version": "0.1.23",
   "description": "",
   "main": "index.js",
   "scripts": {
     "tsc": "tsc --outDir .dest",
-    "prebuild": "rimraf dist dist-esnext",
-    "build": "tsc --outDir dist && tsc --outDir dist-esnext -p config/tsconfig.esnext.json",
+    "prebuild": "rimraf dist",
+    "build": "ngc -p tsconfig.dist.json",
     "test": "npm run jest",
     "test:w": "npm run jest:w",
     "jest": "jest --config=jest.config.json --no-cache",
@@ -24,7 +24,6 @@
     "index.js",
     "index.d.ts",
     "dist",
-    "dist-esnext",
     "src",
     "package.json"
   ],
@@ -35,7 +34,9 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@angular/core": "^4.0.0",
+    "@angular/compiler": "^4.0.3",
+    "@angular/compiler-cli": "^4.0.3",
+    "@angular/core": "^4.0.3",
     "@ngrx/core": "^1.2.0",
     "@ngrx/store": "^2.2.2",
     "@types/jest": "^18.1.1",

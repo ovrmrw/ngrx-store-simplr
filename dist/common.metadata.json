@@ -1,0 +1,1 @@
+[{"__symbolic":"module","version":3,"metadata":{"SimplrOptions":{"__symbolic":"interface"},"Result":{"__symbolic":"interface"}},"exports":[{"from":"@ngrx/store","export":["Action"]}]},{"__symbolic":"module","version":1,"metadata":{"SimplrOptions":{"__symbolic":"interface"},"Result":{"__symbolic":"interface"}},"exports":[{"from":"@ngrx/store","export":["Action"]}]}]
