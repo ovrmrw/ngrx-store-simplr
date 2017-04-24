@@ -1,17 +1,17 @@
 import { NgModule, ModuleWithProviders } from '@angular/core'
 
 import { Simplr } from './simplr'
-import { Adapter, AdapterForNgrxStore, AdapterForTesting } from './adapters'
+import { Adapter, AdapterForNgRedux, AdapterForTesting } from './adapters'
 import { createSimplr } from './common'
 
 
 @NgModule({})
-export class SimplrModule {
+export class SimplrNgReduxModule {
   static forRoot(): ModuleWithProviders {
     return {
-      ngModule: SimplrModule,
+      ngModule: SimplrNgReduxModule,
       providers: [
-        { provide: Adapter, useClass: AdapterForNgrxStore },
+        { provide: Adapter, useClass: AdapterForNgRedux },
         { provide: Simplr, useFactory: createSimplr, deps: [Adapter] },
       ]
     }
@@ -19,7 +19,7 @@ export class SimplrModule {
 
   static forTesting(): ModuleWithProviders {
     return {
-      ngModule: SimplrModule,
+      ngModule: SimplrNgReduxModule,
       providers: [
         { provide: Adapter, useClass: AdapterForTesting },
         { provide: Simplr, useFactory: createSimplr, deps: [Adapter] },

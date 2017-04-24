@@ -1,6 +1,6 @@
-import { ActionReducer, combineReducers } from '@ngrx/store'
+// import { ActionReducer, combineReducers } from '@ngrx/store'
 
-import { Action } from './common'
+import { Action, ActionReducer, combineReducers } from './common'
 
 
 export class Wrapper<T> {
