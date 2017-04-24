@@ -55,12 +55,12 @@ import { AppState } from './models';
 const wrapper = new Wrapper<AppState>();
 
 const wrappedReducers = wrapper.mergeReducersIntoWrappedReducers({
-  counter: null // if you have the reducer for counter key, set here instead of null.
+  counter: null // if you have a reducer for this key, set it here instead of null.
 });
 
 const rootReducer = combineReducers(wrappedReducers);
 
-export function reducer(state, action) { // workaround for AoT build
+export function reducer(state, action) { // workaround for AoT compile
   return rootReducer(state, action);
 }
 
@@ -147,7 +147,7 @@ export class CounterContainerComponent {
 ```
 
 Done!  
-Did you notice that you write no actions and no reducers?
+Did you notice that you wrote no actions and no reducers?
 
 ---
 
