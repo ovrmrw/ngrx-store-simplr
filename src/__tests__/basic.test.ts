@@ -1,5 +1,5 @@
-import { Simplr, Wrapper } from '../'
-import { Adapter, AdapterForTesting } from '../'
+import { Simplr, Wrapper, Adapter } from '../'
+import { AdapterForTesting } from '../adapters'
 import { Observable } from 'rxjs/Observable'
 
 
