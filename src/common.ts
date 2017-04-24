@@ -1,7 +1,10 @@
+import { InjectionToken } from '@angular/core'
 import { Action } from '@ngrx/store'
 
 export { Action, ActionReducer } from '@ngrx/store'
 
+
+export const INITIAL_STATE = new InjectionToken<any>('InitialState')
 
 export interface SimplrOptions {
   logging?: boolean,

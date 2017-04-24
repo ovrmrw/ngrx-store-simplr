@@ -12,6 +12,6 @@ export function createAdapterForNgrxStore<T>(store: Store<T>): Adapter<T> {
   return new AdapterForNgrxStore<T>(store)
 }
 
-export function createAdapterForTesting<T>(): Adapter<T> {
-  return new AdapterForTesting<T>()
+export function createAdapterForTesting<T>(initialState?: T): Adapter<T> {
+  return new AdapterForTesting<T>(initialState)
 }
