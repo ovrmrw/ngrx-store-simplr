@@ -39,11 +39,7 @@ Declare the app state interfaces.
 // app/store/models/index.ts
 
 export interface AppState {
-  counter: CounterState;
-}
-
-export interface CounterState {
-  value: number;
+  counter: number;
 }
 ```
 
@@ -58,18 +54,18 @@ import { AppState } from './models';
 
 const wrapper = new Wrapper<AppState>();
 
-const finalReducer = combineReducers({
-  counter: wrapper.createWrappedReducer('counter')
+const wrappedReducers = wrapper.mergeReducersIntoWrappedReducers({
+  counter: null // if you have the reducer for counter key, set here instead of null.
 });
 
-export function reducer(state, action) {
-  return finalReducer(state, action);
+const rootReducer = combineReducers(wrappedReducers);
+
+export function reducer(state, action) { // workaround for AoT build
+  return rootReducer(state, action);
 }
 
 export const initialState: AppState = {
-  counter: {
-    value: 0
-  }
+  counter: 0
 };
 ```
 
@@ -111,12 +107,12 @@ export class CounterService {
     private simplr: Simplr<AppState>,
   ) { }
 
-  increment(num: number) {
-    this.simplr.dispatch('counter', (state) => ({ value: state.value + num }));
+  increment() {
+    this.simplr.dispatch('counter', (state) => state + 1);
   }
 
   reset() {
-    this.simplr.dispatch('counter', ({ ...initialState.counter }));
+    this.simplr.dispatch('counter', initialState.counter);
   }
 }
 ```
@@ -134,7 +130,6 @@ import { CounterService } from '../services/counter';
   selector: 'app-counter-container',
   template: `
     <button (click)="increment()">increment</button>
-    <button (click)="decrement()">decrement</button>
     <button (click)="reset()">reset</button>
     <pre>{{ state$ | async | json }}</pre>
   `
@@ -146,11 +141,7 @@ export class CounterContainerComponent {
   ) { }
 
   increment() {
-    this.service.increment(1);
-  }
-
-  decrement() {
-    this.service.increment(-1);
+    this.service.increment();
   }
 
   reset() {
@@ -178,15 +169,15 @@ Did you notice that you write no actions and no reducers?
 `dispatch` function allows below sync and async writings.
 
 ```ts
-this.simplr.dispatch('counter', (state) => ({ value: state.value + 1 }))
+this.simplr.dispatch('counter', (state) => state + 1 }))
 // or
-this.simplr.dispatch('counter', ({ value: 1 }))
+this.simplr.dispatch('counter', 1))
 // or 
-this.simplr.dispatch('counter', Promise.resolve((state) => ({ value: state.value + 1 })))
+this.simplr.dispatch('counter', Promise.resolve((state) => state + 1 ))
 // or
-this.simplr.dispatch('counter', Promise.resolve({ value: 1 }))
+this.simplr.dispatch('counter', Promise.resolve(1))
 // or
-this.simplr.dispatch('counter', Observable.of((state) => ({ value: state.value + 1 })))
+this.simplr.dispatch('counter', Observable.of((state) => state + 1 ))
 // or
-this.simplr.dispatch('counter', Observable.of({ value: 1 }))
+this.simplr.dispatch('counter', Observable.of(1))
 ```
