@@ -1,6 +1,5 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-// export { createSimplr } from './ngx'
 var simplr_1 = require("./simplr");
 exports.Simplr = simplr_1.Simplr;
 var wrapper_1 = require("./wrapper");
@@ -9,7 +8,6 @@ var adapters_1 = require("./adapters");
 exports.Adapter = adapters_1.Adapter;
 exports.AdapterForNgrxStore = adapters_1.AdapterForNgrxStore;
 exports.AdapterForTesting = adapters_1.AdapterForTesting;
-var modules_1 = require("./modules");
-exports.SimplrModule = modules_1.SimplrModule;
-// export { provideSimplr, provideSimplrForTesting } from './ngx'
+var simplr_module_1 = require("./simplr.module");
+exports.SimplrModule = simplr_module_1.SimplrModule;
 //# sourceMappingURL=index.js.map
