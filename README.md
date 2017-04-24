@@ -75,19 +75,15 @@ Edit `app.module.ts` in order to use Simplr.
 // app/app.module.ts
 
 import { StoreModule } from '@ngrx/store';
-import { Simplr, Adapter, AdapterForNgrxStore } from 'ngrx-store-simplr';
+import { SimplrModule } from 'ngrx-store-simplr';
 import { reducer, initialState } from './store/reducer';
 
 @NgModule({
-  declarations: [ ... ],
-  imports: [ ...,
-    StoreModule.provideStore(reducer, initialState),
+  imports: [ 
+    ...,
+    StoreModule.provideStore(reducer, initialState), // <== Add
+    SimplrModule.forRoot(), // <== Add
   ],
-  providers: [
-    Simplr,
-    { provide: Adapter, useClass: AdapterForNgrxStore },
-  ],
-  bootstrap: [ ... ]
 })
 export class AppModule { }
 ```

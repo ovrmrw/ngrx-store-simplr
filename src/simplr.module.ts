@@ -1,6 +1,6 @@
 import { NgModule, ModuleWithProviders } from '@angular/core'
-import { Simplr } from '../simplr'
-import { Adapter, AdapterForNgrxStore, AdapterForTesting } from '../adapters'
+import { Simplr } from './simplr'
+import { Adapter, AdapterForNgrxStore, AdapterForTesting } from './adapters'
 
 
 @NgModule({})

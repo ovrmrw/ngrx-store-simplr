@@ -39,6 +39,6 @@ jspm_packages
 
 .dest*
 .tscOutDir/
-# dist/
+dist/
 
 src/**/*.ngsummary.json
