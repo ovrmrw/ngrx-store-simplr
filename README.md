@@ -162,18 +162,48 @@ Did you notice that you wrote no actions and no reducers?
 
 ### dispatch
 
-`dispatch` function allows below sync and async writings.
+#### `dispatch` function allows below sync and async writings.
 
 ```ts
-this.simplr.dispatch('counter', (state) => state + 1 })
+this.simplr.dispatch('counter', (state) => state + 1 ) // callback
 // or
-this.simplr.dispatch('counter', 1)
+this.simplr.dispatch('counter', 1) // value
 // or 
-this.simplr.dispatch('counter', Promise.resolve((state) => state + 1 ))
+this.simplr.dispatch('counter', Promise.resolve((state) => state + 1 )) // callback in Promise
 // or
-this.simplr.dispatch('counter', Promise.resolve(1))
+this.simplr.dispatch('counter', Promise.resolve(1)) // value in Promise
 // or
-this.simplr.dispatch('counter', Observable.of((state) => state + 1 ))
+this.simplr.dispatch('counter', Observable.of((state) => state + 1 )) // callback in Observable
 // or
-this.simplr.dispatch('counter', Observable.of(1))
+this.simplr.dispatch('counter', Observable.of(1)) // value in Observable
+```
+
+#### `dispatch` function returns Observable result especially for testing.
+
+```ts
+interface Result<T, K extends keyof T> {
+  action: Action,
+  state: T,
+  partial: T[K],
+}
+```
+
+```ts
+// getting Action
+const action: Observable<Action> = 
+  this.simplr
+    .dispatch('counter', (state) => state + 1 )
+    .map(result => result.action)
+
+// getting current whole state
+const state: Observable<AppState> =
+  this.simplr
+    .dispatch('counter', (state) => state + 1 )
+    .map(result => result.state) // state ==> { counter: 1 }
+
+// getting current state under the key
+const partial: Observable<number> =
+  this.simplr
+    .dispatch('counter', (state) => state + 1 )
+    .map(result => result.partial) // partial ==> 1
 ```
