@@ -1,5 +1,5 @@
 export { Simplr } from './simplr'
-export { SyncValueOrResolver as Resolver } from './resolver'
+export { SyncValueOrResolver as Resolver, PartialSyncValueOrResolver as PartialResolver } from './resolver'
 export { Wrapper } from './wrapper'
 export { SimplrOptions } from './common'
 export { Adapter, AdapterForNgrxStore, AdapterForTesting } from './adapters'

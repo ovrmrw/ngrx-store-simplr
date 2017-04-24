@@ -15,7 +15,7 @@ import 'rxjs/add/operator/do'
 import 'rxjs/add/operator/delay'
 
 import { Wrapper } from './wrapper'
-import { ValueOrResolver, SyncValueOrResolver } from './resolver'
+import { PartialValueOrResolver, PartialSyncValueOrResolver } from './resolver'
 import { SimplrOptions, Result, Action } from './common'
 import { Adapter } from './adapters'
 
@@ -32,7 +32,7 @@ export class Simplr<T>  {
     private adapter: Adapter<T>,
   ) { }
 
-  dispatch<K extends keyof T>(key: K, resolver: ValueOrResolver<T, K>, options: SimplrOptions = {}): Observable<Result<T, K>> {
+  dispatch<K extends keyof T>(key: K, resolver: PartialValueOrResolver<T, K>, options: SimplrOptions = {}): Observable<Result<T, K>> {
     const returner$ = new ReplaySubject<Action>()
     const { _UPDATE_, _FAILED_ } = this.wrapper.getActionKeysForSimplr(key)
 
@@ -40,7 +40,7 @@ export class Simplr<T>  {
       Observable.of(resolver)
         .mergeMap(resolver => { // if resolver is Promise or Observable, resolve it here
           if (resolver instanceof Promise || resolver instanceof Observable) {
-            return Observable.from<SyncValueOrResolver<T, K>>(resolver).retry(options.retry || RETRY)
+            return Observable.from<PartialSyncValueOrResolver<T, K>>(resolver).retry(options.retry || RETRY)
           } else {
             return Observable.of(resolver)
           }
