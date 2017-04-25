@@ -1,4 +1,6 @@
 import { Observable } from 'rxjs/Observable'
+import 'rxjs/add/observable/of'
+
 import { Action } from '../common'
 import { Adapter } from './adapter'
 import { Wrapper } from '../wrapper'

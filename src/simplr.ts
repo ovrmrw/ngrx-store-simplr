@@ -1,4 +1,3 @@
-// import { Inject, Injectable } from '@angular/core'
 import { Observable } from 'rxjs/Observable'
 import { AsyncSubject } from 'rxjs/AsyncSubject'
 import 'rxjs/add/observable/of'
@@ -14,9 +13,9 @@ import 'rxjs/add/operator/retry'
 import 'rxjs/add/operator/do'
 import 'rxjs/add/operator/delay'
 
+import { SimplrOptions, Result, Action } from './common'
 import { Wrapper } from './wrapper'
 import { PartialValueOrResolver, PartialSyncValueOrResolver } from './resolver'
-import { SimplrOptions, Result, Action } from './common'
 import { Adapter } from './adapters'
 
 const TIMEOUT = 1000 * 15

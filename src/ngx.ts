@@ -1,5 +1,4 @@
-import { Store } from '@ngrx/store'
-
+import { Store } from './common'
 import { Simplr } from './simplr'
 import { Adapter, AdapterForNgrxStore, AdapterForTesting } from './adapters'
 

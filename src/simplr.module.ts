@@ -1,10 +1,10 @@
 import { NgModule, ModuleWithProviders } from '@angular/core'
-import { Store } from '@ngrx/store'
 
+import { Store, INITIAL_STATE } from './common'
 import { Simplr } from './simplr'
 import { Adapter, AdapterForNgrxStore, AdapterForTesting } from './adapters'
 import { createSimplr, createAdapterForNgrxStore, createAdapterForTesting } from './ngx'
-import { INITIAL_STATE } from './common'
+
 
 
 @NgModule({})

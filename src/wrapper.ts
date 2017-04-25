@@ -1,8 +1,8 @@
-import { Action, ActionReducer } from '@ngrx/store'
+import { Action, ActionReducer, NullableActionReducers } from './common'
 
 
 export class Wrapper<T> {
-  mergeReducersIntoWrappedReducers<K extends keyof T>(reducers: NullableActionReducersObject<T>): ActionReducer<T> {
+  mergeReducersIntoWrappedReducers<K extends keyof T>(reducers: NullableActionReducers<T>): ActionReducer<T> {
     const keys = Object.keys(reducers) as K[]
     const finalReducers: ActionReducer<T> =
       keys.reduce((p, key) => {
@@ -53,9 +53,4 @@ export class Wrapper<T> {
   private createFailedKey(key: string): string {
     return key + ' @FAILED@'
   }
-}
-
-
-export type NullableActionReducersObject<T> = {
-  [K in keyof T]: ActionReducer<T[K]> | null
 }

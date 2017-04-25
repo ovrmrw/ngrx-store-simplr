@@ -1,8 +1,6 @@
-// import { Injectable, Inject } from '@angular/core'
-import { Store } from '@ngrx/store'
 import { Observable } from 'rxjs/Observable'
 
-import { Action } from '../common'
+import { Store, Action } from '../common'
 import { Adapter } from './adapter'
 
 

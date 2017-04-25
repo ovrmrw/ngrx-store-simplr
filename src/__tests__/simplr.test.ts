@@ -1,6 +1,6 @@
+import { Observable } from 'rxjs/Rx'
 import { Simplr, Wrapper, Adapter } from '../'
 import { AdapterForTesting } from '../adapters'
-import { Observable } from 'rxjs/Rx'
 
 
 interface TestState {

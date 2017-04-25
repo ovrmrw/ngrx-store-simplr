@@ -1,6 +1,5 @@
 import { Adapter } from '../'
 import { AdapterForTesting } from '../adapters'
-// import { Observable } from 'rxjs/Rx'
 
 
 interface TestState {
