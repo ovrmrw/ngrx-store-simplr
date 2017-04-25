@@ -4,10 +4,12 @@ import { Action, ActionReducer } from '@ngrx/store'
 export class Wrapper<T> {
   mergeReducersIntoWrappedReducers<K extends keyof T>(reducers: NullableActionReducersObject<T>): ActionReducer<T> {
     const keys = Object.keys(reducers) as K[]
-    const finalReducers: ActionReducer<T> = keys.reduce((p, key) => {
-      p[key] = this.createWrappedReducer(key, reducers[key])
-      return p
-    }, {} as any)
+    const finalReducers: ActionReducer<T> =
+      keys.reduce((p, key) => {
+        const reducer = reducers[key]
+        p[key] = this.createWrappedReducer(key, reducer)
+        return p
+      }, {} as any)
     return finalReducers
   }
 
@@ -55,5 +57,5 @@ export class Wrapper<T> {
 
 
 export type NullableActionReducersObject<T> = {
-  [K in keyof T]: ActionReducer<T[K]> | null | undefined
+  [K in keyof T]: ActionReducer<T[K]> | null
 }

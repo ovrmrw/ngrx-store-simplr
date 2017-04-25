@@ -1,6 +1,6 @@
 import { Simplr, Wrapper, Adapter } from '../'
 import { AdapterForTesting } from '../adapters'
-import { Observable } from 'rxjs/Observable'
+import { Observable } from 'rxjs/Rx'
 
 
 interface TestState {
@@ -27,6 +27,7 @@ const initialState: TestState = {
 describe('Basic Test', () => {
   let adapter: Adapter<TestState>
   let simplr: Simplr<TestState>
+  const wrapper = new Wrapper<TestState>()
 
   beforeEach(() => {
     adapter = new AdapterForTesting({ ...initialState })
@@ -39,51 +40,59 @@ describe('Basic Test', () => {
     })
 
     it('can dispatch callback as both sync and async', async () => {
-      await simplr.dispatch('timestamp', (s) => ({ local: s.local + 1 })).toPromise()
-      await simplr.dispatch('timestamp', Promise.resolve((s) => ({ local: s.local + 1 }))).toPromise()
-      await simplr.dispatch('timestamp', Observable.of((s) => ({ local: s.local + 1 }))).toPromise()
-      const state = await adapter.getState().toPromise()
-      expect(state.timestamp.local).toBe(3)
+      const state = await Observable
+        .merge(...[
+          simplr.dispatch('timestamp', (s) => ({ local: s.local + 1 })).toPromise(),
+          simplr.dispatch('timestamp', Promise.resolve((s) => ({ local: s.local + 1 }))).toPromise(),
+          simplr.dispatch('timestamp', Observable.of((s) => ({ local: s.local + 1 }))).toPromise(),
+        ])
+        .last()
+        .map(result => result.state)
+        .toPromise()
       expect(state.timestamp).toEqual({ local: 3, server: 0 })
     })
 
     it('can dispatch direct value as both sync and async', async () => {
-      const results = await Promise.all([
-        simplr.dispatch('timestamp', ({ local: 1 })).toPromise(),
-        simplr.dispatch('timestamp', Promise.resolve({ local: 1 })).toPromise(),
-        simplr.dispatch('timestamp', Observable.of({ local: 1 })).toPromise(),
-      ])
-      const state = results[results.length - 1].state
-      expect(state.timestamp.local).toBe(1)
+      const state = await Observable
+        .merge(...[
+          simplr.dispatch('timestamp', ({ local: 1 })).toPromise(),
+          simplr.dispatch('timestamp', Promise.resolve({ local: 1 })).toPromise(),
+          simplr.dispatch('timestamp', Observable.of({ local: 1 })).toPromise(),
+        ])
+        .last()
+        .map(result => result.state)
+        .toPromise()
       expect(state.timestamp).toEqual({ local: 1, server: 0 })
     })
 
     it('can dispatch deep nested callback', async () => {
-      const results = await Promise.all([
-        simplr.dispatch('timestamp', ({ local: 1 })).toPromise(),
-        simplr.dispatch('timestamp', (state) => () => () => () => ({ local: state.local + 1 })).toPromise(),
-      ])
-      const state = results[results.length - 1].state
-      expect(state.timestamp.local).toBe(2)
+      const state = await Observable
+        .merge(...[
+          simplr.dispatch('timestamp', ({ local: 1 })).toPromise(),
+          simplr.dispatch('timestamp', (state) => () => () => () => ({ local: state.local + 1 })).toPromise(),
+        ])
+        .last()
+        .map(result => result.state)
+        .toPromise()
       expect(state.timestamp).toEqual({ local: 2, server: 0 })
     })
 
     it('can dispatch number', async () => {
-      const { _UPDATE_, _FAILED_ } = new Wrapper<TestState>().getActionKeysForSimplr('counter')
+      const { _UPDATE_, _FAILED_ } = wrapper.getActionKeysForSimplr('counter')
       const result = await simplr.dispatch('counter', (state) => state - 1).toPromise()
       expect(result.action).toEqual({ type: _UPDATE_, payload: 0 })
       expect(result.state.counter).toBe(0)
     })
 
     it('can dispatch boolean', async () => {
-      const { _UPDATE_, _FAILED_ } = new Wrapper<TestState>().getActionKeysForSimplr('flag')
+      const { _UPDATE_, _FAILED_ } = wrapper.getActionKeysForSimplr('flag')
       const result = await simplr.dispatch('flag', false).toPromise()
       expect(result.action).toEqual({ type: _UPDATE_, payload: false })
       expect(result.state.flag).toBe(false)
     })
 
     it('can dispatch array', async () => {
-      const { _UPDATE_, _FAILED_ } = new Wrapper<TestState>().getActionKeysForSimplr('array')
+      const { _UPDATE_, _FAILED_ } = wrapper.getActionKeysForSimplr('array')
       const result = await simplr.dispatch('array', (state) => [...state, 'c']).toPromise()
       expect(result.action).toEqual({ type: _UPDATE_, payload: ['a', 'b', 'c'] })
       expect(result.state.array).toEqual(['a', 'b', 'c'])
