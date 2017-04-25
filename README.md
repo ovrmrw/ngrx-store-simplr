@@ -193,7 +193,7 @@ interface Result<T, K extends keyof T> {
 const action: Observable<Action> = 
   this.simplr
     .dispatch('counter', (state) => state + 1 )
-    .map(result => result.action)
+    .map(result => result.action) // action ==> { type: 'counter @UPDATE@', payload: 1 }
 
 // getting current whole state
 const state: Observable<AppState> =
