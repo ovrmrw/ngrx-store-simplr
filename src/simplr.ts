@@ -43,7 +43,7 @@ export class Simplr<T>  {
             return Observable.of(resolver)
           }
         })
-        .combineLatest(this.adapter.getState())
+        .combineLatest(this.adapter.getState()) // combine synced resolver and current State
         .timeout(options.timeout || TIMEOUT)
         .take(1)
         .map(([resolver, state]) => { // if resolver is Funtion, call it with states
@@ -60,24 +60,13 @@ export class Simplr<T>  {
           }
           return temp
         })
-        // .map(payload => { // resolved-payload must be Object structure
-        //   if (payload instanceof Object && !(payload instanceof Array)) {
-        //     return payload as Partial<T[K]>
-        //   } else {
-        //     if (!this.adapter.testing) {
-        //       console.error('error resolver:', resolver)
-        //       console.error('error resolved-payload:', payload)
-        //     }
-        //     throw new Error('resolved-payload must be Object structure.')
-        //   }
-        // })
-        .map(payload => {
+        .map(payload => { // return Update Action
           return {
             type: _UPDATE_,
             payload,
           } as Action
         })
-        .catch(err => {
+        .catch(err => { // return Failed Action
           if (!this.adapter.testing) {
             console.error(err.message || err)
           }
@@ -87,20 +76,21 @@ export class Simplr<T>  {
           } as Action)
         })
 
-    action$.subscribe(action => {
-      if (this.adapter.testing) {
-        this.adapter.setState(action, key)
-      } else {
-        this.adapter.setState(action)
-      }
-      returner$.next(action)
-      returner$.complete()
-    })
+    action$
+      .subscribe(action => { // dispatch Action to Store
+        if (this.adapter.testing) {
+          this.adapter.setState(action, key)
+        } else {
+          this.adapter.setState(action)
+        }
+        returner$.next(action)
+        returner$.complete()
+      })
 
     return returner$
-      .combineLatest(this.adapter.getState())
+      .combineLatest(this.adapter.getState()) // combine dispatched Action and updated State
       .take(1)
-      .map(([action, state]) => {
+      .map(([action, state]) => { // return Result object
         return Object.assign({}, {
           action,
           state,

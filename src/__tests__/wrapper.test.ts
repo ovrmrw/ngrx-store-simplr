@@ -27,7 +27,7 @@ describe('Wrapper Test', () => {
   })
 
   describe('Wrapper', () => {
-    it('should create an instance', () => {
+    it('should be created', () => {
       expect(wrapper).toBeTruthy()
     })
 

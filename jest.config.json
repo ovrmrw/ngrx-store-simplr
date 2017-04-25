@@ -3,7 +3,8 @@
     "src/**/*.{js,ts}"
   ],
   "setupFiles": [
-    "<rootDir>/node_modules/core-js"
+    "<rootDir>/node_modules/core-js",
+    "<rootDir>/node_modules/rxjs/Rx"
   ],
   "transform": {
     "^.+\\.(ts|tsx)$": "<rootDir>/node_modules/ts-jest/preprocessor.js"
