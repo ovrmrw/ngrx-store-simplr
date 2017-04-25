@@ -1,4 +1,5 @@
-import { Wrapper, ActionReducer, NullableActionReducers } from '../'
+import { Wrapper, ActionReducer } from '../'
+import { NullableActionReducers } from '../common'
 
 
 interface TestState {
