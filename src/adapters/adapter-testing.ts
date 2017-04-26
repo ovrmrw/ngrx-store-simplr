@@ -13,7 +13,7 @@ export class AdapterForTesting<T> extends Adapter<T> {
 
   constructor(initialState?: T) {
     super()
-    this.fakeState = initialState || {} as any
+    this.fakeState = Object.assign({}, initialState || {}) as T
   }
 
   setState<K extends keyof T>(action: Action, key: K): void {
@@ -36,6 +36,6 @@ export class AdapterForTesting<T> extends Adapter<T> {
   }
 
   setInitialState(state: T): void {
-    this.fakeState = state
+    this.fakeState = Object.assign({}, state) as T
   }
 }

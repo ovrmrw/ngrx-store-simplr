@@ -17,7 +17,7 @@ describe('Adapter Test', () => {
   let adapter: Adapter<TestState>
 
   beforeEach(() => {
-    adapter = new AdapterForTesting({ ...initialState })
+    adapter = new AdapterForTesting(initialState)
   })
 
   describe('Adapter', () => {

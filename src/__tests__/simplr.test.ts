@@ -32,7 +32,7 @@ describe('Simplr Test', () => {
   const wrapper = new Wrapper<TestState>()
 
   beforeEach(() => {
-    adapter = new AdapterForTesting({ ...initialState })
+    adapter = new AdapterForTesting(initialState)
     simplr = new Simplr(adapter)
   })
 
