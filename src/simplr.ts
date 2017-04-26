@@ -8,12 +8,12 @@ import 'rxjs/add/operator/timeout'
 import 'rxjs/add/operator/take'
 import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
-import 'rxjs/add/operator/toPromise'
 import 'rxjs/add/operator/retry'
 import 'rxjs/add/operator/do'
-import 'rxjs/add/operator/delay'
+// import 'rxjs/add/operator/toPromise'
+// import 'rxjs/add/operator/delay'
 
-import { SimplrOptions, Result, Action } from './common'
+import { SimplrOptions, Result, Action, GlobalOptions } from './common'
 import { Wrapper } from './wrapper'
 import { PartialValueOrResolver, PartialSyncValueOrResolver } from './resolver'
 import { Adapter } from './adapters'
@@ -27,6 +27,7 @@ export class Simplr<T>  {
 
   constructor(
     private adapter: Adapter<T>,
+    private globalOptions: GlobalOptions = {},
   ) { }
 
   dispatch<K extends keyof T>(key: K, resolver: PartialValueOrResolver<T, K>, options: SimplrOptions = {}): Observable<Result<T, K>> {
@@ -42,7 +43,7 @@ export class Simplr<T>  {
             return Observable.of(resolver)
           }
         })
-        .combineLatest(this.adapter.getState()) // combine synced resolver and current State
+        .combineLatest(this.adapter.currentState$) // combine synced resolver and current State
         .timeout(options.timeout || TIMEOUT)
         .take(1)
         .map(([resolver, state]) => { // if resolver is Funtion, call it with states
@@ -59,11 +60,26 @@ export class Simplr<T>  {
           }
           return temp
         })
-        .map(payload => { // return Update Action
-          return {
-            type: _UPDATE_,
-            payload,
-          } as Action
+        .mergeMap(payload => { // return Update Action
+          return Observable
+            .of<Action>({
+              type: _UPDATE_,
+              payload,
+            })
+            .map(action => {
+              if (options.desc) {
+                return { ...action, desc: options.desc }
+              } else {
+                return action
+              }
+            })
+            .map(action => {
+              if (this.globalOptions.enableAsyncFlag && (resolver instanceof Promise || resolver instanceof Observable)) {
+                return { ...action, async: true }
+              } else {
+                return action
+              }
+            })
         })
         .catch(err => { // return Failed Action
           if (!this.adapter.testing) {
@@ -87,7 +103,7 @@ export class Simplr<T>  {
       })
 
     return returner$
-      .combineLatest(this.adapter.getState()) // combine dispatched Action and updated State
+      .combineLatest(this.adapter.currentState$) // combine dispatched Action and updated State
       .take(1)
       .map(([action, state]) => { // return Result object
         return Object.assign({}, {

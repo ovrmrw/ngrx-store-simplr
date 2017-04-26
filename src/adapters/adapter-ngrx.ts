@@ -18,10 +18,14 @@ export class AdapterForNgrxStore<T> extends Adapter<T> {
   }
 
   getState(): Observable<T> {
+    return this.currentState$
+  }
+
+  get currentState$(): Observable<T> {
     return this.store.select(s => s)
   }
 
   setInitialState(state): void {
-    console.warn('Use setInitialState function only for testing.')
+    throw new Error('Use setInitialState function only for testing.')
   }
 }

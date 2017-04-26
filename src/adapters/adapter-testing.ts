@@ -9,30 +9,29 @@ import { Wrapper } from '../wrapper'
 export class AdapterForTesting<T> extends Adapter<T> {
   testing = true
   private wrapper: Wrapper<T> = new Wrapper<T>()
-  private fakeState: T | undefined
+  private fakeState: T
 
   constructor(initialState?: T) {
     super()
-    if (initialState) {
-      this.fakeState = initialState
-    }
+    this.fakeState = initialState || {} as any
   }
 
   setState<K extends keyof T>(action: Action, key: K): void {
-    if (this.fakeState) {
-      const state = this.fakeState[key]
-      if (state !== undefined) {
-        const reducer = this.wrapper.createWrappedReducer(key)
-        this.fakeState[key] = reducer(state, action)
-      } else {
-        throw new Error(key + ' is not found in fakeState keys.')
-      }
+    const state = this.fakeState[key]
+    if (state !== undefined) {
+      const reducer = this.wrapper.createWrappedReducer(key)
+      const newState = reducer(state, action)
+      this.fakeState[key] = newState
     } else {
-      throw new Error('fakeState is undefined.')
+      throw new Error(key + ' is not found in fakeState keys.')
     }
   }
 
   getState(): Observable<T> {
+    return this.currentState$
+  }
+
+  get currentState$(): Observable<T> {
     return Observable.of(this.fakeState)
   }
 

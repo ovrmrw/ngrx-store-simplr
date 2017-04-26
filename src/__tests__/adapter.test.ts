@@ -3,23 +3,13 @@ import { AdapterForTesting } from '../adapters'
 
 
 interface TestState {
-  timestamp: {
-    local: number,
-    server: number,
-  },
-  counter: number,
-  flag: boolean,
-  array: string[],
+  a: number,
+  b: number,
 }
 
 const initialState: TestState = {
-  timestamp: {
-    local: 0,
-    server: 0,
-  },
-  counter: 1,
-  flag: true,
-  array: ['a', 'b'],
+  a: 0,
+  b: 0,
 }
 
 
@@ -36,15 +26,15 @@ describe('Adapter Test', () => {
     })
 
     it('should return a state as Observable', async () => {
-      const state = await adapter.getState().toPromise()
+      const state = await adapter.currentState$.toPromise()
       expect(state).toEqual(initialState)
     })
 
     it('can overwrite initial state', async () => {
-      adapter.setInitialState({ ...initialState, counter: 9 })
-      const state = await adapter.getState().toPromise()
+      adapter.setInitialState({ ...initialState, b: 9 })
+      const state = await adapter.currentState$.toPromise()
       expect(state).not.toEqual(initialState)
-      expect(state.counter).toBe(9)
+      expect(state).toEqual({ a: 0, b: 9 })
     })
   })
 })

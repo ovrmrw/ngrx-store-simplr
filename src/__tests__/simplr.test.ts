@@ -134,5 +134,39 @@ describe('Simplr Test', () => {
       expect(result.state.array).toEqual(['a', 'b', 'c', 'foo'])
       expect(result.partial).toEqual(['a', 'b', 'c', 'foo'])
     })
+
+    describe('Description Option', () => {
+      it('should add description to the Action', async () => {
+        const { _UPDATE_, _FAILED_ } = wrapper.getActionKeysForSimplr('counter')
+        const result = await simplr.dispatch('counter', 1, { desc: 'foobar' }).toPromise()
+        expect(result.action).toEqual({ type: _UPDATE_, payload: 1, desc: 'foobar' })
+      })
+    })
+
+    describe('Timeout Option', () => {
+      it('should fail the Action taking time over timeout value', async () => {
+        const { _UPDATE_, _FAILED_ } = wrapper.getActionKeysForSimplr('counter')
+        const result = await simplr.dispatch('counter', Observable.of(1).delay(100), { timeout: 90 }).toPromise()
+        expect(result.action).toEqual({ type: _FAILED_ })
+      })
+    })
+
+    describe('Async Flag', () => {
+      beforeEach(() => {
+        simplr = new Simplr(adapter, {
+          enableAsyncFlag: true
+        })
+      })
+
+      it('should be true when dispatching Promise or Observable', async () => {
+        const { _UPDATE_, _FAILED_ } = wrapper.getActionKeysForSimplr('counter')
+        const result1 = await simplr.dispatch('counter', 1).toPromise()
+        expect(result1.action).toEqual({ type: _UPDATE_, payload: 1 })
+        const result2 = await simplr.dispatch('counter', Promise.resolve(1)).toPromise()
+        expect(result2.action).toEqual({ type: _UPDATE_, payload: 1, async: true })
+        const result3 = await simplr.dispatch('counter', Observable.of(1)).toPromise()
+        expect(result3.action).toEqual({ type: _UPDATE_, payload: 1, async: true })
+      })
+    })
   })
 })

@@ -189,19 +189,19 @@ interface Result<T, K extends keyof T> {
 ```
 
 ```ts
-// getting Action
+// getting dispatched Action
 const action: Observable<Action> = 
   this.simplr
     .dispatch('counter', (state) => state + 1 )
     .map(result => result.action) // action ==> { type: 'counter @UPDATE@', payload: 1 }
 
-// getting current whole state
+// getting updated current whole state
 const state: Observable<AppState> =
   this.simplr
     .dispatch('counter', (state) => state + 1 )
     .map(result => result.state) // state ==> { counter: 1 }
 
-// getting current state under the key
+// getting udpated current state under the key
 const partial: Observable<number> =
   this.simplr
     .dispatch('counter', (state) => state + 1 )
