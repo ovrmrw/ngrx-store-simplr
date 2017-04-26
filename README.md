@@ -207,3 +207,25 @@ const partial: Observable<number> =
     .dispatch('counter', (state) => state + 1 )
     .map(result => result.partial) // partial ==> 1
 ```
+
+#### `dispatch` function allows to set some options.
+
+```ts
+// description option
+const action: Observable<Action> = 
+  this.simplr
+    .dispatch('counter', (state) => state + 1, { desc: 'foobar' } )
+    .map(result => result.action) // action ==> { type: 'counter @UPDATE@', payload: 1, desc: 'foobar' }
+
+// timeout option (default: 1000 * 15)
+const action: Observable<Action> = 
+  this.simplr
+    .dispatch('counter', Observable.of((state) => state + 1).delay(100), { timeout: 90 } )
+    .map(result => result.action) // action ==> { type: 'counter @FAILED@' }
+
+// retry option (default: 3)
+this.simplr.dispatch('counter', /* will try this HTTP request 10 times */, { retry: 10 } )
+
+// logging option ... if set be true, the result will be shown on browser console.
+this.simplr.dispatch('counter', (state) => state + 1, { logging: true } )
+```
