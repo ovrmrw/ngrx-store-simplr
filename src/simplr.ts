@@ -32,12 +32,17 @@ export class Simplr<T>  {
 
   dispatch<K extends keyof T>(key: K, resolver: PartialValueOrResolver<T, K>, options: SimplrOptions = {}): Observable<Result<T, K>> {
     const returner$ = new AsyncSubject<Action>()
-    const { _UPDATE_, _FAILED_ } = this.wrapper.getActionKeysForSimplr(key)
+    const { _UPDATE_, _FAILED_, _START_, _FINISHED_ } = this.wrapper.getActionKeysForSimplr(key)
+    const actions: Action[] = []
 
     const action$: Observable<Action> =
       Observable.of(resolver)
         .mergeMap(resolver => { // if resolver is Promise or Observable, resolve it here
           if (resolver instanceof Promise || resolver instanceof Observable) {
+            if (this.globalOptions.enableAsyncActions) {
+              const startAction = this.adapter.setState({ type: _START_ }, key)
+              actions.push(startAction)
+            }
             return Observable.from<PartialSyncValueOrResolver<T, K>>(resolver).retry(options.retry || RETRY)
           } else {
             return Observable.of(resolver)
@@ -73,13 +78,13 @@ export class Simplr<T>  {
                 return action
               }
             })
-            .map(action => {
-              if (this.globalOptions.enableAsyncFlag && (resolver instanceof Promise || resolver instanceof Observable)) {
-                return { ...action, async: true }
-              } else {
-                return action
-              }
-            })
+          // .map(action => {
+          //   if (this.globalOptions.enableAsyncFlag && (resolver instanceof Promise || resolver instanceof Observable)) {
+          //     return { ...action, async: true }
+          //   } else {
+          //     return action
+          //   }
+          // })
         })
         .catch(err => { // return Failed Action
           if (!this.adapter.testing) {
@@ -93,11 +98,19 @@ export class Simplr<T>  {
 
     action$
       .subscribe(action => { // dispatch Action to Store
-        if (this.adapter.testing) {
-          this.adapter.setState(action, key)
-        } else {
-          this.adapter.setState(action)
+        // if (this.adapter.testing) {
+        //   this.adapter.setState(action, key)
+        // } else {
+        //   this.adapter.setState(action)
+        // }
+        const mainAction = this.adapter.setState(action, key)
+        actions.push(mainAction)
+
+        if (this.globalOptions.enableAsyncActions && (resolver instanceof Promise || resolver instanceof Observable)) {
+          const finishedAction = this.adapter.setState({ type: _FINISHED_ }, key)
+          actions.push(finishedAction)
         }
+
         returner$.next(action)
         returner$.complete()
       })
@@ -108,6 +121,7 @@ export class Simplr<T>  {
       .map(([action, state]) => { // return Result object
         return Object.assign({}, {
           action,
+          actions,
           state,
           partial: state[key]
         }) as Result<T, K>

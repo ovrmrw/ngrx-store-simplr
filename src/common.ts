@@ -8,7 +8,8 @@ export const INITIAL_STATE = new InjectionToken<any>('InitialState')
 export const GLOBAL_OPTIONS = new InjectionToken<GlobalOptions>('GlobalOptions')
 
 export interface GlobalOptions {
-  enableAsyncFlag?: boolean,
+  // enableAsyncFlag?: boolean,
+  enableAsyncActions?: boolean,
 }
 
 export interface SimplrOptions {
@@ -20,6 +21,7 @@ export interface SimplrOptions {
 
 export interface Result<T, K extends keyof T> {
   action: Action,
+  actions: Action[],
   state: T,
   partial: T[K],
 }

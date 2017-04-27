@@ -151,21 +151,37 @@ describe('Simplr Test', () => {
       })
     })
 
-    describe('Async Flag', () => {
+    describe('Global Options - enableAsyncActions', () => {
       beforeEach(() => {
-        simplr = new Simplr(adapter, {
-          enableAsyncFlag: true
-        })
+        simplr = new Simplr(adapter, { enableAsyncActions: true })
       })
 
-      it('should be true when dispatching Promise or Observable', async () => {
-        const { _UPDATE_, _FAILED_ } = wrapper.getActionKeysForSimplr('counter')
-        const result1 = await simplr.dispatch('counter', 1).toPromise()
-        expect(result1.action).toEqual({ type: _UPDATE_, payload: 1 })
-        const result2 = await simplr.dispatch('counter', Promise.resolve(2)).toPromise()
-        expect(result2.action).toEqual({ type: _UPDATE_, payload: 2, async: true })
-        const result3 = await simplr.dispatch('counter', Observable.of(3)).toPromise()
-        expect(result3.action).toEqual({ type: _UPDATE_, payload: 3, async: true })
+      it('Sync resolver does not make START and FINISHED actions', async () => {
+        const { _UPDATE_, _FAILED_, _START_, _FINISHED_ } = wrapper.getActionKeysForSimplr('counter')
+        const result = await simplr.dispatch('counter', 1).toPromise()
+        expect(result.actions).toEqual([
+          { type: _UPDATE_, payload: 1 },
+        ])
+      })
+
+      it('Promise resolver makes START and FINISHED actions', async () => {
+        const { _UPDATE_, _FAILED_, _START_, _FINISHED_ } = wrapper.getActionKeysForSimplr('counter')
+        const result = await simplr.dispatch('counter', Promise.resolve(2)).toPromise()
+        expect(result.actions).toEqual([
+          { type: _START_ },
+          { type: _UPDATE_, payload: 2 },
+          { type: _FINISHED_ },
+        ])
+      })
+
+      it('Observable resolver makes START and FINISHED actions', async () => {
+        const { _UPDATE_, _FAILED_, _START_, _FINISHED_ } = wrapper.getActionKeysForSimplr('counter')
+        const result = await simplr.dispatch('counter', Observable.of(3)).toPromise()
+        expect(result.actions).toEqual([
+          { type: _START_ },
+          { type: _UPDATE_, payload: 3 },
+          { type: _FINISHED_ },
+        ])
       })
     })
   })

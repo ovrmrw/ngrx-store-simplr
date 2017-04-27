@@ -13,8 +13,9 @@ export class AdapterForNgrxStore<T> extends Adapter<T> {
     super()
   }
 
-  setState(action: Action): void {
+  setState(action: Action): Action {
     this.store.dispatch(action)
+    return action
   }
 
   getState(): Observable<T> {

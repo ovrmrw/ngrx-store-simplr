@@ -14,7 +14,7 @@ export class Wrapper<T> {
   }
 
   createWrappedReducer<K extends keyof T>(key: K, innerReducer?: ActionReducer<T[K]> | null): ActionReducer<T[K]> {
-    const { _UPDATE_, _FAILED_ } = this.getActionKeysForSimplr(key)
+    const { _UPDATE_, _FAILED_, _START_, _FINISHED_ } = this.getActionKeysForSimplr(key)
 
     return function outerReducer(state: T[K], action: Action): T[K] {
       switch (action.type) {
@@ -33,6 +33,12 @@ export class Wrapper<T> {
         case _FAILED_:
           return state
 
+        case _START_:
+          return state
+
+        case _FINISHED_:
+          return state
+
         default:
           return innerReducer ? innerReducer(state, action) : state
       }
@@ -43,6 +49,8 @@ export class Wrapper<T> {
     return {
       _UPDATE_: this.createUpdateKey(key),
       _FAILED_: this.createFailedKey(key),
+      _START_: this.createAsyncStartKey(key),
+      _FINISHED_: this.createAsyncFinishedKey(key),
     }
   }
 
@@ -52,5 +60,13 @@ export class Wrapper<T> {
 
   private createFailedKey(key: string): string {
     return key + ' @FAILED@'
+  }
+
+  private createAsyncStartKey(key: string): string {
+    return key + ' @ASYNC START@'
+  }
+
+  private createAsyncFinishedKey(key: string): string {
+    return key + ' @ASYNC FINISHED@'
   }
 }
