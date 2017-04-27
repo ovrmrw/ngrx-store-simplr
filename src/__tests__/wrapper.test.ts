@@ -3,17 +3,13 @@ import { NullableActionReducers } from '../common'
 
 
 interface TestState {
-  a: number
+  a: number,
   b: number,
-  c: number,
-  d: number,
 }
 
 const testReducers: NullableActionReducers<TestState> = {
   a: null,
-  b: null,
-  c: null,
-  d: (state, action) => state,
+  b: (state, action) => state,
 }
 
 
@@ -29,7 +25,7 @@ describe('Wrapper Test', () => {
       it('created reducer has the same keys with the argument reducer', () => {
         const reducers = wrapper.mergeReducersIntoWrappedReducers(testReducers)
         const keys = Object.keys(reducers)
-        expect(keys).toEqual(['a', 'b', 'c', 'd'])
+        expect(keys).toEqual(['a', 'b'])
       })
 
       it('created reducer has replaced as wrapped reducer for each keys', () => {
