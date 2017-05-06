@@ -1,6 +1,6 @@
 {
   "name": "ngrx-store-simplr",
-  "version": "0.1.33",
+  "version": "0.1.35",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -52,7 +52,7 @@
     "typescript": "^2.2.0"
   },
   "peerDependencies": {
-    "@angular/core": "^2.0.0",
+    "@angular/core": "^2.0.0 || ^4.0.0",
     "@ngrx/store": "^2.0.0",
     "rxjs": "^5.0.0",
     "typescript": "^2.1.4"
