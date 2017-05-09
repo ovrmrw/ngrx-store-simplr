@@ -45,9 +45,9 @@ describe('Simplr Test', () => {
       const state =
         await Observable
           .merge(...[
-            simplr.dispatch('timestamp', (s) => ({ local: s.local + 1 })).toPromise(),
-            simplr.dispatch('timestamp', Promise.resolve((s) => ({ local: s.local + 1 }))).toPromise(),
-            simplr.dispatch('timestamp', Observable.of((s) => ({ local: s.local + 1 }))).toPromise(),
+            simplr.dispatch('timestamp', (timestamp) => ({ local: timestamp.local + 1 })).toPromise(),
+            simplr.dispatch('timestamp', Promise.resolve((timestamp) => ({ local: timestamp.local + 1 }))).toPromise(),
+            simplr.dispatch('timestamp', Observable.of((timestamp) => ({ local: timestamp.local + 1 }))).toPromise(),
           ])
           .last()
           .map(result => result.state).toPromise()
@@ -72,7 +72,7 @@ describe('Simplr Test', () => {
         await Observable
           .merge(...[
             simplr.dispatch('timestamp', ({ local: 1 })).toPromise(),
-            simplr.dispatch('timestamp', (state) => () => () => () => ({ local: state.local + 1 })).toPromise(),
+            simplr.dispatch('timestamp', (timestamp) => () => () => () => ({ local: timestamp.local + 1 })).toPromise(),
           ])
           .last()
           .map(result => result.state).toPromise()
@@ -84,8 +84,8 @@ describe('Simplr Test', () => {
       const result =
         await Observable
           .merge(...[
-            simplr.dispatch('counter', (state) => state - 1),
-            simplr.dispatch('counter', (state, all) => state + all.array.length),
+            simplr.dispatch('counter', (counter) => counter - 1),
+            simplr.dispatch('counter', (counter, all) => counter + all.array.length),
           ])
           .last().toPromise()
       expect(result.action).toEqual({ type: _UPDATE_, payload: 2 })
@@ -113,7 +113,7 @@ describe('Simplr Test', () => {
         await Observable
           .merge(...[
             simplr.dispatch('flag', true),
-            simplr.dispatch('flag', (state) => !state),
+            simplr.dispatch('flag', (flag) => !flag),
           ])
           .last().toPromise()
       expect(result.action).toEqual({ type: _UPDATE_, payload: false })
@@ -126,8 +126,8 @@ describe('Simplr Test', () => {
       const result =
         await Observable
           .merge(...[
-            simplr.dispatch('array', (state) => [...state, 'c']),
-            simplr.dispatch('array', (state, all) => [...state, all.str]),
+            simplr.dispatch('array', (array) => [...array, 'c']),
+            simplr.dispatch('array', (array, all) => [...array, all.str]),
           ])
           .last().toPromise()
       expect(result.action).toEqual({ type: _UPDATE_, payload: ['a', 'b', 'c', 'foo'] })

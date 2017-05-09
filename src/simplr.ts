@@ -10,8 +10,6 @@ import 'rxjs/add/operator/map'
 import 'rxjs/add/operator/catch'
 import 'rxjs/add/operator/retry'
 import 'rxjs/add/operator/do'
-// import 'rxjs/add/operator/toPromise'
-// import 'rxjs/add/operator/delay'
 
 import { SimplrOptions, Result, Action, GlobalOptions } from './common'
 import { Wrapper } from './wrapper'
@@ -40,7 +38,8 @@ export class Simplr<T>  {
         .mergeMap(resolver => { // if resolver is Promise or Observable, resolve it here
           if (resolver instanceof Promise || resolver instanceof Observable) {
             if (this.globalOptions.enableAsyncActions) {
-              const startAction = this.adapter.setState({ type: _START_ }, key)
+              const startAction = { type: _START_ }
+              this.adapter.setState(startAction, key)
               actions.push(startAction)
             }
             return Observable.from<PartialSyncValueOrResolver<T, K>>(resolver).retry(options.retry || RETRY)
@@ -78,13 +77,6 @@ export class Simplr<T>  {
                 return action
               }
             })
-          // .map(action => {
-          //   if (this.globalOptions.enableAsyncFlag && (resolver instanceof Promise || resolver instanceof Observable)) {
-          //     return { ...action, async: true }
-          //   } else {
-          //     return action
-          //   }
-          // })
         })
         .catch(err => { // return Failed Action
           if (!this.adapter.testing) {
@@ -98,16 +90,13 @@ export class Simplr<T>  {
 
     action$
       .subscribe(action => { // dispatch Action to Store
-        // if (this.adapter.testing) {
-        //   this.adapter.setState(action, key)
-        // } else {
-        //   this.adapter.setState(action)
-        // }
-        const mainAction = this.adapter.setState(action, key)
+        const mainAction = action
+        this.adapter.setState(mainAction, key)
         actions.push(mainAction)
 
         if (this.globalOptions.enableAsyncActions && (resolver instanceof Promise || resolver instanceof Observable)) {
-          const finishedAction = this.adapter.setState({ type: _FINISHED_ }, key)
+          const finishedAction = { type: _FINISHED_ }
+          this.adapter.setState(finishedAction, key)
           actions.push(finishedAction)
         }
 

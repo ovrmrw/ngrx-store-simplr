@@ -16,7 +16,7 @@ export class AdapterForTesting<T> extends Adapter<T> {
     this.fakeState = Object.assign({}, initialState || {}) as T
   }
 
-  setState<K extends keyof T>(action: Action, key: K): Action {
+  setState<K extends keyof T>(action: Action, key: K): void {
     const state = this.fakeState[key]
     if (state !== undefined) {
       const reducer = this.wrapper.createWrappedReducer(key)
@@ -25,7 +25,6 @@ export class AdapterForTesting<T> extends Adapter<T> {
     } else {
       throw new Error(key + ' is not found in fakeState keys.')
     }
-    return action
   }
 
   getState(): Observable<T> {
